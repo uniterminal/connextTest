@@ -32,7 +32,6 @@
                             ></v-text-field>
                         </v-input>
                     </v-row>
-                    <v-subheader>To: {{this.depositNetwork}}</v-subheader>
                 </v-col>
             </v-col>
             <v-col>
@@ -51,11 +50,11 @@
 import Matic from '@maticnetwork/maticjs'
 const MaticPOSClient = require('@maticnetwork/maticjs').MaticPOSClient
 //import Web3 from 'web3'
-//import axios from 'axios'
+import axios from 'axios'
 import { ethers } from 'ethers'
 
 export default {
-  name: 'MaticBridge',
+  name: 'AnySwapBridge',
   data()
   {
     return {
@@ -139,6 +138,17 @@ export default {
                 this.fromNetwork = 'Ethereum'
             }
         },
+
+        async bridgeAPI()
+        {
+            console.log('calling bridge')
+            const bridgeData = await axios.get('https://bridgeapi.anyswap.exchange/v2/serverInfo/chainid')
+            if(bridgeData)
+            {
+                console.log('response from bridge',bridgeData)
+            }
+        },
+
 
         async approveERC20ETH()
         {
@@ -352,8 +362,9 @@ export default {
 
     async mounted()
     {
-
-
+        console.log('starting')
+        this.bridgeAPI()
+        console.log('bridge called')
         this.getChainId()
         console.log('testing')
         console.log(this.maticProvider)
